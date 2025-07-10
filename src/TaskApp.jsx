@@ -2,7 +2,7 @@ import React, {useState} from "react"
 
 function TaskApp() {
 
-    const [tasks, taskSetter] = useState(['Workout', 'Laundry', 'Learn React'])
+    const [tasks, taskSetter] = useState(['Design', 'Implement', 'Deploy'])
     const [newTask, newTaskSetter] = useState('')
 
     function inputChange(event) {
