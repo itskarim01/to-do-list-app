@@ -2,7 +2,12 @@ import React, {useState} from "react"
 
 function TaskApp() {
 
-    const [tasks, taskSetter] = useState(['Design', 'Implement', 'Deploy'])
+    // Initialize tasks as objects with text and time
+    const [tasks, taskSetter] = useState([
+        { text: 'Design', time: new Date().toLocaleString() },
+        { text: 'Implement', time: new Date().toLocaleString() },
+        { text: 'Deploy', time: new Date().toLocaleString() }
+    ])
     const [newTask, newTaskSetter] = useState('')
 
     function inputChange(event) {
@@ -10,16 +15,12 @@ function TaskApp() {
     }
 
     function addTask() {
-
         if (newTask.trim() !== '') {
-            taskSetter(t => [...t, newTask])
+            // Add new task as object with text and time
+            const taskObj = { text: newTask, time: new Date().toLocaleString() }
+            taskSetter(t => [...t, taskObj])
             newTaskSetter('')
         }
-    }
-
-    function deleteTask(index) {
-        const updatedTasks = tasks.filter((_, i) => i !== index)
-        taskSetter(updatedTasks)
     }
 
     function moveUp(index) {
@@ -32,7 +33,7 @@ function TaskApp() {
     }
 
     function moveDown(index) {
-        if (index > 0) {
+        if (index < tasks.length - 1) {
             const updatedTasks = [...tasks];
             [updatedTasks[index], updatedTasks[index + 1]] = 
             [updatedTasks[index + 1], updatedTasks[index]];
@@ -40,7 +41,10 @@ function TaskApp() {
         }
     }
 
-    
+    function deleteTask(index) {
+        const updatedTasks = tasks.filter((_, i) => i !== index)
+        taskSetter(updatedTasks)
+    }
 
     return(
     <div className="to-do-list">
@@ -50,12 +54,14 @@ function TaskApp() {
             <input type="text" value={newTask} onChange={inputChange} placeholder="Add a task..."/>
             <button className="add-button" onClick={addTask}>+</button>
         </div>
-        
         <ol>
             {tasks.map((task, index) => 
             <li key={index}>
-                <span className="text">{task}</span>
-                
+                <div style={{textAlign: 'left'}}>
+                    <span className="text">{task.text}</span>
+                    <p className="time" style={{fontSize: '13px', color: '#888'}}>({task.time})</p>
+                </div>
+
                 <div className="task-action">
                     <button onClick={() => moveUp(index)} className="move-up" >⬆</button>
                     <button onClick={() => moveDown(index)} className="move-down">⬇</button>
